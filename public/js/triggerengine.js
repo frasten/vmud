@@ -2,6 +2,7 @@ TriggerEngine = function(screen, socket)
 {
 	this.screen = screen;
 	this.socket = socket;
+	this.triggers = [];
 };
 
 TriggerEngine.prototype.parseInput = function(command)
@@ -22,7 +23,9 @@ TriggerEngine.prototype.parseInput = function(command)
 	if(command.charAt(0) == '.' && !/[^nwsedu0-9]+/.test(command.substring(1))){
 		this.parseSpeedWalkPath(command.substring(1));
 	} else {
-		this.sendRawCommand(command);
+		var aliasExists = this.runAllTriggers(command, TriggerTypeEnum.FROM_COMMAND_LINE);
+		if (!aliasExists)
+			this.sendRawCommand(command);
 	}
 
 };
@@ -57,4 +60,18 @@ TriggerEngine.prototype.parseSpeedWalkPath = function(path) {
 		};
 		times = 1; // Reset the counter
 	}
+};
+
+TriggerEngine.prototype.runAllTriggers = function(command, triggerType) {
+	var triggerFound = false;
+	for (var i = 0; i < this.triggers.length; i++) {
+		var t = this.triggers[i];
+		if (t.triggerType == triggerType)
+		{
+			// this trigger is a candidate, let's try it!
+			var isMatching = t.match(command);
+			triggerFound |= isMatching;
+		}
+	};
+	return triggerFound;
 };

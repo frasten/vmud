@@ -53,6 +53,8 @@ Router.prototype.index = function(){
 		.addLibrary('/js/cmd.js')
 		.addLibrary('/js/global.js')
 		.addLibrary('/js/triggerengine.js')
+		.addLibrary('/js/trigger.js')
+		.addLibrary('/js/commands.js')
 		.display('index.html');
 	this.view.debug('hello');
 };
