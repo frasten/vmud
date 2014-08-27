@@ -35,7 +35,8 @@ vMud.prototype._initCommandline = function(){
 		.focus()
 		.commandLine({
 			socket: self.socket,
-			screen: self.screen
+			screen: self.screen,
+			triggerEngine: new TriggerEngine(self.screen, self.socket)
 		});
 };
 

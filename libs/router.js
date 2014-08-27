@@ -52,6 +52,7 @@ Router.prototype.index = function(){
 		.addLibrary('/js/vmud.js')
 		.addLibrary('/js/cmd.js')
 		.addLibrary('/js/global.js')
+		.addLibrary('/js/triggerengine.js')
 		.display('index.html');
 	this.view.debug('hello');
 };

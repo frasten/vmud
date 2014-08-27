@@ -3,7 +3,8 @@ $.fn.commandLine = function(options){
 
 	var config = $.extend(true, {
 		socket : null,
-		screen : null
+		screen : null,
+		triggerEngine : null
 	}, options || {}),
 		cmd_history = [],
 		i_history = null;
@@ -20,22 +21,16 @@ $.fn.commandLine = function(options){
 						case 13: // Send msg
 							i_history = null;
 							if(self.attr('type') != 'password'){
-								config.screen.appendCmd(command);
 								cmd_history.push(command);
 								if(cmd_history.length > 5){
 									cmd_history.splice(0,1);
 								}
-							}
-							if(command.charAt(0) == '.' && !/[^nwsedu]+/.test(command.substring(1))){
-								var path = command.substring(1);
-								for(var i = 0 ; i < path.length ; i++){
-									config.socket.emit('web input', path.charAt(i));
-								}
-							} else {
-								config.socket.emit('web input', command);
+
+								config.triggerEngine.parseInput(command);
 							}
 							self.select();
 							if(self.attr('type') == 'password'){
+								config.socket.emit('web input', command);
 								self
 									.val('')
 									.attr('type', 'text');
