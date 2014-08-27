@@ -6,6 +6,18 @@ TriggerEngine = function(screen, socket)
 
 TriggerEngine.prototype.parseInput = function(command)
 {
+	// Try to split eventual multiple commands if separated by ";"
+	// (but we don't want to mess up the smileys ;)
+	var singleCommands = command.split(/;(?![-()='])/g);
+	if (singleCommands.length > 1)
+	{
+		for (var i = 0; i < singleCommands.length; i++) {
+			var newCom = singleCommands[i].trim();
+			this.parseInput(newCom);
+		}
+		return;
+	}
+
 	// Speedwalk (.nes2ud):
 	if(command.charAt(0) == '.' && !/[^nwsedu0-9]+/.test(command.substring(1))){
 		this.parseSpeedWalkPath(command.substring(1));
