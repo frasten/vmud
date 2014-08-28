@@ -54,4 +54,10 @@ $(document)
 					}
 				}
 			});
+
+		screen.click(function(){
+			var sel = getSelection().toString();
+			if (!sel)
+				cmd.focus();
+		});
 	});
