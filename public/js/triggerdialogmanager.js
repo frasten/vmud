@@ -3,6 +3,7 @@ TriggerDialogManager = function(mud){
 	this.engine = mud.triggerEngine;
 	this.triggerList = $("#trigger-list");
 	this.patternField = null;
+	this.triggerTypeField = null;
 	this.dialog = null;
 	this.editor = null;
 	this.currentTriggerId = -1;
@@ -29,11 +30,13 @@ TriggerDialogManager.prototype.bindEvents = function() {
 		self.editor.setReadOnly(false);
 		$("#deleteTrigger").removeAttr("disabled");
 		self.patternField.removeAttr("disabled");
+		self.triggerTypeField.removeAttr("disabled");
 
 		var id = self.triggerList.find("option:selected").attr("value");
 		self.currentTriggerId = id;
 		var trig = self.engine.triggers[id];
 		self.patternField.val(trig.pattern);
+		self.triggerTypeField.val(trig.triggerType);
 		self.editor.setValue(trig.body);
 		self.editor.moveCursorTo(0,0);
 		self.patternField.focus();
@@ -53,6 +56,7 @@ TriggerDialogManager.prototype.initEditor = function() {
 TriggerDialogManager.prototype.init = function(dialog) {
 	this.dialog = dialog;
 	this.patternField = this.dialog.find("input[name='pattern']");
+	this.triggerTypeField = this.dialog.find("[name='trigger-type']");
 	this.initEditor();
 	this.resize();
 	this.loadTriggers();
@@ -61,11 +65,12 @@ TriggerDialogManager.prototype.init = function(dialog) {
 };
 
 TriggerDialogManager.prototype.resize = function() {
-	this.triggerList.height(this.triggerList.parent().height() - $("#trigger-actions-toolbar").height())
+	this.triggerList.height(this.triggerList.parent().height() - $("#trigger-actions-toolbar").height() - 1)
 
 	var parentHeight = this.triggerList.parent().height();
 	var patternHeight = $("#pattern-fields").height();
-	var newHeight = parentHeight - patternHeight - 16;
+	var otherFieldsHeight = $("#other-fields").height();
+	var newHeight = parentHeight - patternHeight - otherFieldsHeight - 17;
 	$("#actions-editor").height(newHeight);
 
 	this.editor.resize();
@@ -90,7 +95,7 @@ TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 	var newTrig = new Trigger();
 	newTrig.pattern = this.patternField.val();
 	newTrig.body = this.editor.getValue();
-	newTrig.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE; // TODO TEMP!!!
+	newTrig.triggerType = this.triggerTypeField.val();
 	newTrig.engine = this.engine;
 
 	// Update/add the existing trigger:
@@ -126,5 +131,7 @@ TriggerDialogManager.prototype.deselect = function() {
 	this.editor.setValue("");
 	$("#deleteTrigger").attr("disabled", "disabled");
 	this.patternField.attr("disabled", "disabled");
+	this.triggerTypeField.attr("disabled", "disabled");
+
 	this.editor.setReadOnly(true);
 }

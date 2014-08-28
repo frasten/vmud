@@ -33,25 +33,6 @@ vMud.prototype._initHandlers = function(){
 vMud.prototype._initCommandline = function(){
 	var self = this;
 	this.triggerEngine = new TriggerEngine(self.screen, self.socket);
-	/* TEMP!!! */
-	/*
-	var t = new Trigger();
-	t.pattern = "^gt (.*)$";
-	t.body = "send(\"gt $c0008\" + arg[1] + \"$c0009\");";
-	t.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE;
-	t.engine = this.triggerEngine; // Link!
-	this.triggerEngine.triggers.push(t);
-	// -----------------------------
-	var t = new Trigger();
-	t.pattern = "^ascii$";
-	t.body = "var str=\"\";for(i=1;i<=15;i++){str+=\"$c00\" + (i<10?'0':\"\") + i + \"\" + i};send(\"echo \" + str);";
-	t.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE;
-	t.engine = this.triggerEngine; // Link!
-	this.triggerEngine.triggers.push(t);
-	*/
-
-	this.triggerEngine.save();
-	/* /TEMP!!! */
 
 	this.cmd
 		.focus()
