@@ -3,6 +3,7 @@ TriggerDialogManager = function(mud, dialog){
 	this.engine = mud.triggerEngine;
 	this.triggerList = $("#trigger-list");
 	this.dialog = dialog;
+	this.editor = null;
 };
 
 TriggerDialogManager.prototype.loadTriggers = function() {
@@ -22,11 +23,19 @@ TriggerDialogManager.prototype.bindEvents = function() {
 		var id = self.triggerList.find("option:selected").attr("value");
 		var trig = self.engine.triggers[id];
 		self.dialog.find("input[name='pattern']").val(trig.pattern);
-		self.dialog.find("textarea").val(trig.body);
+		self.editor.setValue(trig.body);
+		self.editor.moveCursorTo(0,0);
 	});
 }
 
+TriggerDialogManager.prototype.initEditor = function() {
+	this.editor = ace.edit("actions-editor");
+	this.editor.setTheme("ace/theme/chrome");
+	this.editor.getSession().setMode("ace/mode/javascript");
+}
+
 TriggerDialogManager.prototype.init = function() {
+	this.initEditor();
 	this.loadTriggers();
 	this.bindEvents();
 };

@@ -74,6 +74,9 @@ $(document)
 					manager.init();
 				}
 			});
+		var editor = ace.edit("actions-editor");
+		editor.setTheme("ace/theme/chrome");
+		editor.getSession().setMode("ace/mode/javascript");
 
 		screen.click(function(){
 			var sel = getSelection().toString();
