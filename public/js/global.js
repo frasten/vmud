@@ -58,7 +58,7 @@ $(document)
 		$( "#dialog-triggers" )
 			.dialog({
 				autoOpen: false,
-				height: 400,
+				height: $(window).height() * 0.8,
 				width: "60%",
 				modal: false,
 				buttons: {

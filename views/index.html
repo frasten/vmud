@@ -56,7 +56,14 @@
 	</form>
 </div>
 <div id="dialog-triggers" title="Triggers" class="hidden">
-	<select id="trigger-list" size="10"></select>
+	<div id="dialog-triggers-left-column">
+		<div id="trigger-actions-toolbar">
+			<input type="button" value="Add" id="addTrigger" />
+			<input type="button" value="Delete" id="deleteTrigger" />
+			<div style="clear:both"></div>
+		</div>
+		<select id="trigger-list" size="10"></select>
+	</div>
 	<form id="trigger-editor-fields">
 		<fieldset>
 			<div id="pattern-fields">
@@ -69,6 +76,4 @@
 			</div>
 		</fieldset>
 	</form>
-	<div style="clear:both"></div>
-
 </div>

@@ -2,6 +2,7 @@ TriggerDialogManager = function(mud){
 	this.mud = mud;
 	this.engine = mud.triggerEngine;
 	this.triggerList = $("#trigger-list");
+	this.patternField = null;
 	this.dialog = null;
 	this.editor = null;
 	this.currentTriggerId = -1;
@@ -26,12 +27,15 @@ TriggerDialogManager.prototype.bindEvents = function() {
 		var id = self.triggerList.find("option:selected").attr("value");
 		self.currentTriggerId = id;
 		var trig = self.engine.triggers[id];
-		var patternField = self.dialog.find("input[name='pattern']");
-		patternField.val(trig.pattern);
+		self.patternField.val(trig.pattern);
 		self.editor.setValue(trig.body);
 		self.editor.moveCursorTo(0,0);
-		patternField.focus();
+		self.patternField.focus();
 	});
+
+	$("#addTrigger").click(function() {self.newTrigger();});
+	$("#deleteTrigger").click(function() {self.deleteTrigger();});
+	this.patternField.keyup(function() {self.refreshCurrentTriggerPattern();});
 }
 
 TriggerDialogManager.prototype.initEditor = function() {
@@ -42,6 +46,7 @@ TriggerDialogManager.prototype.initEditor = function() {
 
 TriggerDialogManager.prototype.init = function(dialog) {
 	this.dialog = dialog;
+	this.patternField = this.dialog.find("input[name='pattern']");
 	this.initEditor();
 	this.resize();
 	this.loadTriggers();
@@ -49,13 +54,25 @@ TriggerDialogManager.prototype.init = function(dialog) {
 };
 
 TriggerDialogManager.prototype.resize = function() {
-	var parentHeight = this.triggerList.height();
+	this.triggerList.height(this.triggerList.parent().height() - $("#trigger-actions-toolbar").height())
+
+	var parentHeight = this.triggerList.parent().height();
 	var patternHeight = $("#pattern-fields").height();
 	var newHeight = parentHeight - patternHeight - 16;
 	$("#actions-editor").height(newHeight);
 
 	this.editor.resize();
-}
+};
+
+TriggerDialogManager.prototype.newTrigger = function() {
+	var newTrig = new Trigger();
+	newTrig.engine = this.engine;
+	this.engine.triggers.push(newTrig);
+	this.engine.save();
+	this.loadTriggers();
+	this.triggerList.find("option:last").attr("selected", "selected");
+	this.triggerList.change()
+};
 
 TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 	if (this.currentTriggerId < 0)
@@ -64,7 +81,7 @@ TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 
 	// Create the new trigger:
 	var newTrig = new Trigger();
-	newTrig.pattern = this.dialog.find("input[name='pattern']").val();
+	newTrig.pattern = this.patternField.val();
 	newTrig.body = this.editor.getValue();
 	newTrig.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE; // TODO TEMP!!!
 	newTrig.engine = this.engine;
@@ -73,8 +90,14 @@ TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 	this.engine.triggers[this.currentTriggerId] = newTrig;
 	this.engine.save();
 
-	this.triggerList.find("option:nth-of-type(" + (this.currentTriggerId+1) + ")").text(newTrig.pattern);
-}
+	this.refreshCurrentTriggerPattern();
+};
 
+TriggerDialogManager.prototype.refreshCurrentTriggerPattern = function() {
+	var currentTrigger = this.engine.triggers[this.currentTriggerId];
+	this.triggerList.find("option").eq(this.currentTriggerId).text(this.patternField.val());
+};
 
-
+TriggerDialogManager.prototype.deleteTrigger = function() {
+	// NOOP
+};

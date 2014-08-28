@@ -122,12 +122,18 @@ body,html{
   h1 { font-size: 1.2em; margin: .6em 0; }
 }
 
-#trigger-list{
-  width:100px;
-  height: 100%;
+#dialog-triggers-left-column {
   float:left;
   margin-right:20px;
-  margin-top: 5px;
+  height:100%;
+  width:100px;
+  #trigger-list{
+    margin-top: 5px;
+    width:100%;
+  }
+  #trigger-actions-toolbar input {
+    float: left;
+  }
 }
 
 #dialog-triggers {
