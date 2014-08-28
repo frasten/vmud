@@ -84,6 +84,7 @@ TriggerDialogManager.prototype.newTrigger = function() {
 	this.loadTriggers();
 	this.triggerList.find("option:last").attr("selected", "selected");
 	this.triggerList.change()
+	this.refreshCurrentTriggerPattern();
 };
 
 TriggerDialogManager.prototype.saveCurrentTrigger = function() {
@@ -107,7 +108,10 @@ TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 
 TriggerDialogManager.prototype.refreshCurrentTriggerPattern = function() {
 	var currentTrigger = this.engine.triggers[this.currentTriggerId];
-	this.triggerList.find("option").eq(this.currentTriggerId).text(this.patternField.val());
+	var newPattern = this.patternField.val();
+	if (newPattern.trim().length == 0)
+		newPattern = "(new)";
+	this.triggerList.find("option").eq(this.currentTriggerId).text(newPattern);
 };
 
 TriggerDialogManager.prototype.deleteTrigger = function() {

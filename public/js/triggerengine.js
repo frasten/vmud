@@ -91,6 +91,8 @@ TriggerEngine.prototype.load = function() {
 		}
 		// Relink the triggers to this engine:
 		for (var i = 0; i < savedTriggers.length; i++) {
+			// Cast to a real Trigger object:
+			savedTriggers[i] = new Trigger(savedTriggers[i]);
 			savedTriggers[i].engine = this;
 		};
 		console.log("Triggers loaded.");
