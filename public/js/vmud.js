@@ -5,6 +5,7 @@ vMud = function(url, socket, cmd, screen, menu){
 	this.cmd = cmd;
 	this.screen = screen;
 	this.menu = new Menu(menu);
+	this.triggerEngine = null;
 
 	this._initHandlers();
 	this._initCommandline();
@@ -31,21 +32,25 @@ vMud.prototype._initHandlers = function(){
 
 vMud.prototype._initCommandline = function(){
 	var self = this;
-	var trig = new TriggerEngine(self.screen, self.socket);
+	this.triggerEngine = new TriggerEngine(self.screen, self.socket);
 	/* TEMP!!! */
+	/*
 	var t = new Trigger();
 	t.pattern = "^gt (.*)$";
 	t.body = "send(\"gt $c0008\" + arg[1] + \"$c0009\");";
 	t.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE;
-	t.engine = trig; // Link!
-	trig.triggers.push(t);
+	t.engine = this.triggerEngine; // Link!
+	this.triggerEngine.triggers.push(t);
 	// -----------------------------
 	var t = new Trigger();
 	t.pattern = "^ascii$";
 	t.body = "var str=\"\";for(i=1;i<=15;i++){str+=\"$c00\" + (i<10?'0':\"\") + i + \"\" + i};send(\"echo \" + str);";
 	t.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE;
-	t.engine = trig; // Link!
-	trig.triggers.push(t);
+	t.engine = this.triggerEngine; // Link!
+	this.triggerEngine.triggers.push(t);
+	*/
+
+	this.triggerEngine.save();
 	/* /TEMP!!! */
 
 	this.cmd
@@ -53,7 +58,7 @@ vMud.prototype._initCommandline = function(){
 		.commandLine({
 			socket: self.socket,
 			screen: self.screen,
-			triggerEngine: trig
+			triggerEngine: self.triggerEngine
 		});
 };
 

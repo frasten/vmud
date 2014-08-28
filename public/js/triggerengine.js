@@ -2,7 +2,7 @@ TriggerEngine = function(screen, socket)
 {
 	this.screen = screen;
 	this.socket = socket;
-	this.triggers = [];
+	this.triggers = this.load();
 };
 
 TriggerEngine.prototype.parseInput = function(command)
@@ -75,3 +75,40 @@ TriggerEngine.prototype.runAllTriggers = function(command, triggerType) {
 	};
 	return triggerFound;
 };
+
+TriggerEngine.prototype.load = function() {
+	var storage = localStorage.getItem("triggers");
+	if (storage)
+	{
+		try
+		{
+			var savedTriggers = JSON.parse(storage);
+		}
+		catch (err)
+		{
+			console.error(err);
+			return [];
+		}
+		// Relink the triggers to this engine:
+		for (var i = 0; i < savedTriggers.length; i++) {
+			savedTriggers[i].engine = this;
+		};
+		console.log("Triggers loaded.");
+		return savedTriggers;
+	}
+	else
+		return [];
+}
+
+TriggerEngine.prototype.save = function() {
+	// We must unbind the trigger from us, or we'll get a
+	// "Converting circular structure to JSON" exception.
+	for (var i = 0; i < this.triggers.length; i++) {
+		this.triggers[i].engine = null;
+	};
+
+	localStorage.setItem("triggers", JSON.stringify(this.triggers));
+	console.log("Triggers saved.");
+	// Reload to rebind them!
+	this.triggers = this.load();
+}
