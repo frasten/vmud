@@ -72,6 +72,9 @@ $(document)
 				},
 				open: function() {
 					trigDialogManager.init($(this));
+				},
+				resize: function() {
+					trigDialogManager.resize();
 				}
 			});
 

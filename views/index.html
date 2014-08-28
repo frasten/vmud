@@ -56,16 +56,19 @@
 	</form>
 </div>
 <div id="dialog-triggers" title="Triggers" class="hidden">
-	<select id="trigger-list" size="10">
-		<option>trigger1</option>
-		<option>trigger2</option>
-	</select>
-	<form>
+	<select id="trigger-list" size="10"></select>
+	<form id="trigger-editor-fields">
 		<fieldset>
-			<label for="pattern">Pattern:</label>
-			<input type="text" name="pattern" class="text ui-widget-content ui-corner-all" />
-			<label for="actions">Actions:</label>
-			<div id="actions-editor" name="actions" class="text ui-widget-content ui-corner-all"></div>
+			<div id="pattern-fields">
+				<label for="pattern">Pattern:</label>
+				<input type="text" name="pattern" class="text ui-widget-content ui-corner-all" />
+			</div>
+			<div id="editor-fields">
+				<label for="actions">Actions:</label>
+				<div id="actions-editor" name="actions" class="text ui-widget-content ui-corner-all"></div>
+			</div>
 		</fieldset>
 	</form>
+	<div style="clear:both"></div>
+
 </div>

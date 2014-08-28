@@ -26,9 +26,11 @@ TriggerDialogManager.prototype.bindEvents = function() {
 		var id = self.triggerList.find("option:selected").attr("value");
 		self.currentTriggerId = id;
 		var trig = self.engine.triggers[id];
-		self.dialog.find("input[name='pattern']").val(trig.pattern);
+		var patternField = self.dialog.find("input[name='pattern']");
+		patternField.val(trig.pattern);
 		self.editor.setValue(trig.body);
 		self.editor.moveCursorTo(0,0);
+		patternField.focus();
 	});
 }
 
@@ -41,9 +43,19 @@ TriggerDialogManager.prototype.initEditor = function() {
 TriggerDialogManager.prototype.init = function(dialog) {
 	this.dialog = dialog;
 	this.initEditor();
+	this.resize();
 	this.loadTriggers();
 	this.bindEvents();
 };
+
+TriggerDialogManager.prototype.resize = function() {
+	var parentHeight = this.triggerList.height();
+	var patternHeight = $("#pattern-fields").height();
+	var newHeight = parentHeight - patternHeight - 16;
+	$("#actions-editor").height(newHeight);
+
+	this.editor.resize();
+}
 
 TriggerDialogManager.prototype.saveCurrentTrigger = function() {
 	if (this.currentTriggerId < 0)
