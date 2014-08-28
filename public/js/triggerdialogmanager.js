@@ -17,12 +17,18 @@ TriggerDialogManager.prototype.loadTriggers = function() {
 			.attr("value", key)
 			.text(value.pattern));
 	});
+	this.currentTriggerId = -1;
 };
 
 TriggerDialogManager.prototype.bindEvents = function() {
 	var self = this;
 	this.triggerList.change(function() {
 		self.saveCurrentTrigger();
+
+		// Re-enable all the disabled controls:
+		self.editor.setReadOnly(false);
+		$("#deleteTrigger").removeAttr("disabled");
+		self.patternField.removeAttr("disabled");
 
 		var id = self.triggerList.find("option:selected").attr("value");
 		self.currentTriggerId = id;
@@ -51,6 +57,7 @@ TriggerDialogManager.prototype.init = function(dialog) {
 	this.resize();
 	this.loadTriggers();
 	this.bindEvents();
+	this.deselect();
 };
 
 TriggerDialogManager.prototype.resize = function() {
@@ -99,5 +106,25 @@ TriggerDialogManager.prototype.refreshCurrentTriggerPattern = function() {
 };
 
 TriggerDialogManager.prototype.deleteTrigger = function() {
-	// NOOP
+	if (this.currentTriggerId < 0)
+		return;
+
+	var ok = confirm("Do you really want to delete this trigger?");
+	if (ok)
+	{
+		this.engine.triggers.splice(this.currentTriggerId, 1);
+		this.engine.save();
+		this.loadTriggers();
+		this.deselect();
+	}
 };
+
+TriggerDialogManager.prototype.deselect = function() {
+	this.triggerList.val(-1);
+	this.currentTriggerId = -1;
+	this.patternField.val("");
+	this.editor.setValue("");
+	$("#deleteTrigger").attr("disabled", "disabled");
+	this.patternField.attr("disabled", "disabled");
+	this.editor.setReadOnly(true);
+}
