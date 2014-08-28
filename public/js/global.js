@@ -54,6 +54,26 @@ $(document)
 					}
 				}
 			});
+		$( "#dialog-triggers" )
+			.dialog({
+				autoOpen: false,
+				height: 400,
+				width: "60%",
+				modal: false,
+				buttons: {
+					Save: function() {
+						mud.triggerEngine.save();
+						$( this ).dialog( "close" );
+					},
+					Cancel: function() {
+						$( this ).dialog( "close" );
+					}
+				},
+				open: function() {
+					var manager = new TriggerDialogManager(mud, $(this));
+					manager.init();
+				}
+			});
 
 		screen.click(function(){
 			var sel = getSelection().toString();

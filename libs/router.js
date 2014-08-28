@@ -55,6 +55,7 @@ Router.prototype.index = function(){
 		.addLibrary('/js/triggerengine.js')
 		.addLibrary('/js/trigger.js')
 		.addLibrary('/js/commands.js')
+		.addLibrary('/js/triggerdialogmanager.js')
 		.display('index.html');
 	this.view.debug('hello');
 };

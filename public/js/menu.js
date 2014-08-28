@@ -50,3 +50,7 @@ Menu.prototype.closeMenu = function(){
 Menu.connect = function(){
 	$( "#dialog-connect" ).dialog('open');
 };
+
+Menu.edit_triggers = function(){
+	$( "#dialog-triggers").dialog('open');
+};

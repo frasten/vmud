@@ -18,14 +18,12 @@
 					<!--<li>Manage connections</li>-->
 				<!--</ul>-->
 			<!--</li>-->
-			<!--<li>-->
-				<!--Triggers-->
-				<!--<ul>-->
-					<!--<li>Quick connect</li>-->
-					<!--<li>Open stored connection</li>-->
-					<!--<li>Manage connections</li>-->
-				<!--</ul>-->
-			<!--</li>-->
+			<li>
+				Triggers
+				<ul>
+					<li><a href="javascript:void(0)" data-action="edit_triggers">Edit triggers</a></li>
+				</ul>
+			</li>
 			<!--<li>-->
 				<!--Variables-->
 				<!--<ul>-->
@@ -54,6 +52,20 @@
 			<input type="text" name="host" id="host" class="text ui-widget-content ui-corner-all" />
 			<label for="port">Port</label>
 			<input type="text" name="port" id="port" value="6000" class="text ui-widget-content ui-corner-all" />
+		</fieldset>
+	</form>
+</div>
+<div id="dialog-triggers" title="Triggers" class="hidden">
+	<select id="trigger-list" size="10">
+		<option>trigger1</option>
+		<option>trigger2</option>
+	</select>
+	<form>
+		<fieldset>
+			<label for="pattern">Pattern:</label>
+			<input type="text" name="pattern" class="text ui-widget-content ui-corner-all" />
+			<label for="actions">Actions:</label>
+			<textarea name="actions" class="text ui-widget-content ui-corner-all" rows="10"></textarea>
 		</fieldset>
 	</form>
 </div>
