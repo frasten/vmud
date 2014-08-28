@@ -54,6 +54,7 @@ $(document)
 					}
 				}
 			});
+		var trigDialogManager = new TriggerDialogManager(mud);
 		$( "#dialog-triggers" )
 			.dialog({
 				autoOpen: false,
@@ -62,7 +63,7 @@ $(document)
 				modal: false,
 				buttons: {
 					Save: function() {
-						mud.triggerEngine.save();
+						trigDialogManager.saveCurrentTrigger();
 						$( this ).dialog( "close" );
 					},
 					Cancel: function() {
@@ -70,13 +71,9 @@ $(document)
 					}
 				},
 				open: function() {
-					var manager = new TriggerDialogManager(mud, $(this));
-					manager.init();
+					trigDialogManager.init($(this));
 				}
 			});
-		var editor = ace.edit("actions-editor");
-		editor.setTheme("ace/theme/chrome");
-		editor.getSession().setMode("ace/mode/javascript");
 
 		screen.click(function(){
 			var sel = getSelection().toString();

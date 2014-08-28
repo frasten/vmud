@@ -1,9 +1,10 @@
-TriggerDialogManager = function(mud, dialog){
+TriggerDialogManager = function(mud){
 	this.mud = mud;
 	this.engine = mud.triggerEngine;
 	this.triggerList = $("#trigger-list");
-	this.dialog = dialog;
+	this.dialog = null;
 	this.editor = null;
+	this.currentTriggerId = -1;
 };
 
 TriggerDialogManager.prototype.loadTriggers = function() {
@@ -20,7 +21,10 @@ TriggerDialogManager.prototype.loadTriggers = function() {
 TriggerDialogManager.prototype.bindEvents = function() {
 	var self = this;
 	this.triggerList.change(function() {
+		self.saveCurrentTrigger();
+
 		var id = self.triggerList.find("option:selected").attr("value");
+		self.currentTriggerId = id;
 		var trig = self.engine.triggers[id];
 		self.dialog.find("input[name='pattern']").val(trig.pattern);
 		self.editor.setValue(trig.body);
@@ -34,8 +38,31 @@ TriggerDialogManager.prototype.initEditor = function() {
 	this.editor.getSession().setMode("ace/mode/javascript");
 }
 
-TriggerDialogManager.prototype.init = function() {
+TriggerDialogManager.prototype.init = function(dialog) {
+	this.dialog = dialog;
 	this.initEditor();
 	this.loadTriggers();
 	this.bindEvents();
 };
+
+TriggerDialogManager.prototype.saveCurrentTrigger = function() {
+	if (this.currentTriggerId < 0)
+		// No trigger selected:
+		return;
+
+	// Create the new trigger:
+	var newTrig = new Trigger();
+	newTrig.pattern = this.dialog.find("input[name='pattern']").val();
+	newTrig.body = this.editor.getValue();
+	newTrig.triggerType = TriggerTypeEnum.FROM_COMMAND_LINE; // TODO TEMP!!!
+	newTrig.engine = this.engine;
+
+	// Update/add the existing trigger:
+	this.engine.triggers[this.currentTriggerId] = newTrig;
+	this.engine.save();
+
+	this.triggerList.find("option:nth-of-type(" + (this.currentTriggerId+1) + ")").text(newTrig.pattern);
+}
+
+
+
