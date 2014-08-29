@@ -61,7 +61,14 @@ vMud.prototype._initWebSocket = function(){
 
 vMud.prototype.dataReceived = function(text){
 	text = this.normaliseInput(text);
-	this.writeToScreen(text);
+
+	var lines = text.split("<br />");
+	for (var i = 0; i < lines.length; i++) {
+		var line = lines[i];
+		var cleanedText = this.cleanText(line);
+		this.writeToScreen(line + "<br />");
+		this.triggerEngine.runAllTriggers(cleanedText, TriggerTypeEnum.FROM_MUD);
+	};
 };
 
 vMud.prototype.writeToScreen = function(text){
@@ -87,6 +94,10 @@ vMud.prototype.normaliseInput = function(text){
 	}
 	return text;
 };
+
+vMud.prototype.cleanText = function(text) {
+	return $("<div>" + text + "</div>").text();
+}
 
 vMud.prototype.systemMsg = function(txt){
 	var cmd  = $('<span/>')
