@@ -83,4 +83,16 @@ $(document)
 			if (!sel)
 				cmd.focus();
 		});
+		resizeLayout();
 	});
+
+$(window).resize(resizeLayout);
+
+function resizeLayout() {
+	var bodyHeight = $("body").height();
+	var cmdHeight = $("#cmd").outerHeight(true);
+	var menuHeight = $("#menu").outerHeight(true);
+	var bodyBottomPadding = 10;
+	$("#screen").innerHeight(bodyHeight - cmdHeight - menuHeight - bodyBottomPadding);
+	$(".panel").innerHeight(bodyHeight - menuHeight - bodyBottomPadding);
+}
